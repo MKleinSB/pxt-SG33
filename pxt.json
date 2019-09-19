@@ -1,0 +1,24 @@
+{
+    "name": "SG33",
+    "version": "1.0.0",
+    "description": "XinaBox SG33 Air Quailty sensor: TVOC and eCO2",
+    "authors": [
+        "Bjarke Gotfredsen",
+        "Brendan van Breda",
+        "Shao Ziyang"
+    ],
+    "license": "MIT",
+    "dependencies": {
+        "core": "*"
+    },
+    "files": [
+        "README.md",
+        "sg33.ts",
+        "_locales/zh/SW01-strings.json"
+    ],
+    "testFiles": [
+        "test.ts"
+    ],
+    "public": true,
+    "preferredEditor": "tsprj"
+}
