@@ -14,7 +14,6 @@
     "files": [
         "README.md",
         "sg33.ts",
-        "_locales/zh/SW01-strings.json"
     ],
     "testFiles": [
         "test.ts"
