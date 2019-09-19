@@ -13,7 +13,7 @@
     },
     "files": [
         "README.md",
-        "sg33.ts",
+        "sg33.ts"
     ],
     "testFiles": [
         "test.ts"
