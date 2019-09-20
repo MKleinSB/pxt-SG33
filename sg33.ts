@@ -2,7 +2,7 @@
  * XinaBox SG33 extension for makecode
  */
 
-enum CSS811_MEAS_MODE {
+enum Measuremode {
     //% block="IDLE"
     MODE_IDLE = 0x00,
     //% block="1SEC"
@@ -54,6 +54,18 @@ namespace SG33 {
         return pins.i2cReadNumber(SG33_ADDR, NumberFormat.Int16LE);
     }
 
+    function readBlock(reg: number, count: number): number[] {
+        let buf: Buffer = pins.createBuffer(count);
+        pins.i2cWriteNumber(SG33_ADDR, reg, NumberFormat.UInt8BE);
+        buf = pins.i2cReadBuffer(SG33_ADDR, count);
+
+        let tempbuf: number[] = [];
+        for (let i: number = 0; i < count; i++) {
+            tempbuf[i] = buf[i];
+        }
+        return tempbuf;
+    }
+
     writereg(0xF4)
 
     if (checkForStatusError()) {
@@ -62,7 +74,7 @@ namespace SG33 {
 
     disableInterrupt();
 
-    setDriveMode(CSS811_MEAS_MODE.MODE_1SEC);
+    setDriveMode(Measuremode.MODE_1SEC);
 
     // get new sensor data from SG33
     function get(): void {
@@ -70,16 +82,41 @@ namespace SG33 {
             getAlgorithmResults();
         }
     }
+    
+    /**
+     * Volatile organic compounds (VOCs)
+     * https://en.wikipedia.org/wiki/Volatile_organic_compound
+     * @param u the pressure unit
+     */
+    //% block="SG33 TVOC"
+    //% group="Variables"
+    //% weight=84 blockGap=8
+    export function TVOC(): number {
+        get();
+        return TVOC_;
+    }
 
+    /**
+     * The temperature in degrees Celcius or Fahrenheit
+     * https://en.wikipedia.org/wiki/Carbon_dioxide
+     * https://en.wikipedia.org/wiki/Carbon_dioxide_sensor#Estimated_CO2_sensor
+     */
+    //% block="SG33 eCO2"
+    //% group="Variables"
+    //% weight=88 blockGap=8
+    export function eCO2(): number {
+        get();
+        return eCO2_;
+    }
     /**
     * The CCS811 has 5 modes of operation
     * http://ams.com/eng/content/download/951091/2269479/471718
     * @param u the meas mode
     */
-    //% blockId="SG33_SET_MEAS_MODE" block="SG33 MEAS MODE %u"
+    //% block="SG33 measure mode %u"
     //% group="Optional"
     //% weight=84 blockGap=8
-    export function setDriveMode(u: CSS811_MEAS_MODE): void {
+    export function setDriveMode(u: Measuremode): void {
         let meas_mode = getreg(0x01);
         meas_mode &= 0x0C;
         setreg(0x01, meas_mode | u);
@@ -99,7 +136,7 @@ namespace SG33 {
     * The SG33 has an alternative to Power-On reset 
     * http://ams.com/eng/content/download/951091/2269479/471718
     */
-    //% blockId="SG33_SW_RESET"
+    //% block="SG33 software reset"
     //% group="Optional"
     //% weight=84 blockGap=8
     export function softwareReset(): void {
@@ -112,17 +149,17 @@ namespace SG33 {
         pins.i2cWriteBuffer(SG33_ADDR, buf);
     }
 
-    let eCO2 = 0
-    let TVOC = 0
+    let eCO2_ = 0
+    let TVOC_ = 0
 
     // get new data from registers
     function getAlgorithmResults(): void {
-        let buf = pins.createBuffer(8);
+        //let buf = pins.createBuffer(8);
+        let buf: number[]= readBlock(0X02, 8);
+        //buf = pins.i2cReadBuffer(SG33_ADDR, 8, false);
 
-        buf = pins.i2cReadBuffer(SG33_ADDR, 8, false);
-
-        eCO2 = (buf[0] << 8) || (buf[1]);
-        TVOC = (buf[2] << 8) || (buf[3]);
+        eCO2_ = (buf[0] << 8) | (buf[1]);
+        TVOC_ = (buf[2] << 8) | (buf[3]);
     }
 
 
@@ -137,35 +174,9 @@ namespace SG33 {
     }
 
     /**
-     * Volatile organic compounds (VOCs)
-     * https://en.wikipedia.org/wiki/Volatile_organic_compound
-     * @param u the pressure unit
-     */
-    //% blockId="SG33_GET_TVOC"
-    //% group="Variables"
-    //% weight=84 blockGap=8
-    export function getTVOC(): number {
-        get();
-        return TVOC;
-    }
-
-    /**
-     * The temperature in degrees Celcius or Fahrenheit
-     * https://en.wikipedia.org/wiki/Carbon_dioxide
-     * https://en.wikipedia.org/wiki/Carbon_dioxide_sensor#Estimated_CO2_sensor
-     */
-    //% blockId="SG33_GET_eC02"
-    //% group="Variables"
-    //% weight=88 blockGap=8
-    export function getCO2(): number {
-        get();
-        return eCO2;
-    }
-
-    /**
      * Enable interrupts on the SG33
      */
-    //% blockId="SG33_ENABLE_INT"
+    //% block="SG33 enable interrupts"
     //% group="Optional"
     //% weight=98 blockGap=8
     export function enableInterrupt() {
@@ -177,7 +188,7 @@ namespace SG33 {
     /**
      * Disable interrupts on the SG33
      */
-    //% blockId="SG33_DISABLE_INT"
+    //% block="SG33 disable interrupts"
     //% group="Optional"
     //% weight=98 blockGap=8  
     export function disableInterrupt() {
