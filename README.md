@@ -1,3 +1,8 @@
+[![GitHub Issues](https://img.shields.io/github/issues/xinabox/pxt-SG33.svg)](https://github.com/xinabox/pxt-SG33/issues) 
+![GitHub Commit](https://img.shields.io/github/last-commit/xinabox/pxt-SG33) 
+![Maintained](https://img.shields.io/maintenance/yes/2020) 
+![Build status badge](https://github.com/xinabox/pxt-SG33/workflows/maker/badge.svg)
+![Build status badge](https://github.com/xinabox/pxt-SG33/workflows/microbit/badge.svg)
 # XinaBox SG33 MakeCode extension
 
 This library provides functions to access environmental data from the [XinaBox SG33](https://xinabox.cc/products/sg33).
