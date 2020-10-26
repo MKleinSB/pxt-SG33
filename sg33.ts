@@ -199,8 +199,8 @@ namespace SG33 {
 
     /**
      * Set I2C address
-     * On:  0x76
-     * Off: 0x77
+     * On:  0x5A
+     * Off: 0x5B
      * @param on on is I2C address 0x5A, off is 0x5B
      */
     //% blockId="SG33_SET_ADDRESS" block="SG33 address %on"
