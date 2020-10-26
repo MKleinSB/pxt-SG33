@@ -21,7 +21,7 @@ enum Measuremode {
 //% color=#444444 icon="\uf2dc"
 //% groups=['On start', 'Variables', 'Optional']
 namespace SG33 {
-    let SG33_ADDR = 0x5A
+    let SG33_ADDR = 0x5B //Original 0X5A angepasst für Gatorenvironment
 
     function writereg(dat: number): void {
         pins.i2cWriteNumber(SG33_ADDR, dat, NumberFormat.UInt8BE);
