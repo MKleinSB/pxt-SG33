@@ -1,6 +1,6 @@
 {
     "name": "SG33",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "XinaBox SG33 Air Quailty sensor: TVOC and eCO2",
     "license": "MIT",
     "dependencies": {
